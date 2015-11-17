@@ -32,7 +32,7 @@ class Params {
 	
 	
 	// Performs the Post/Get/Redirect process.
-	public static function pgr() {
+	public static function postGetRedirect() {
 		// Check to see if there is POST data.
 		if (count($_POST) > 0) {
 			// Initialize the $_SESSION['params'] variable.

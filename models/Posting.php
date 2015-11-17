@@ -18,7 +18,7 @@ class Posting extends Model {
 	public function __construct($pstg_id = null) {
 		// Load the object from the database.
 		if ($pstg_id != null) {
-			$this->loadFromDb('posting', $pstg_id);
+			$this->loadFromDb('posting', 'pstg_id', $pstg_id);
 		}
 	}
 	

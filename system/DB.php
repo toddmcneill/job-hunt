@@ -1,5 +1,11 @@
 <?php
 
+// Define DB connection parameters.
+define('DB_HOST', 'localhost');
+define('DB_USERNAME', 'job_hunt_user');
+define('DB_PASSWORD', 'K6NdbvSjV6LXy2mK');
+define('DB_NAME', 'job_hunt');
+
 class DB {
 	
 	// This is the single static link used by all database-related functionality.
@@ -22,15 +28,14 @@ class DB {
 	// Executes a query and returns the result.
 	// If all 3 parameters are used, the query is processed as a prepared statement.
 	// $query: A string containing the sql query.
-	// $param_types: A string containing s, i, d, or b corresponding to each parameter in a prepared statement.
-	// $params: An array containing the parameters used in a prepared statement.
-	public static function query($query, $param_types = null, $params = null) {
+	// $params (optional): An array containing the parameters used in a prepared statement.
+	public static function query($query, $params = null) {
 		// Make sure a connection exists.
 		self::connectToDb();
 		
 		// Check to see if the query should be executed as a prepared statement.
-		if (!is_null($param_types) && !is_null($params)) {
-			return self::preparedResultQuery($query, $param_types, $params);
+		if (!is_null($params)) {
+			return self::preparedResultQuery($query, $params);
 		}
 		
 		// Execute the query and get the query result.
@@ -46,7 +51,7 @@ class DB {
 	
 	
 	// Executes a query using a prepared statement and returns the result.
-	public static function preparedResultQuery($query, $param_types, $params) {
+	public static function preparedResultQuery($query, $params) {
 		// Make sure a connection exists.
 		self::connectToDb();
 		
@@ -57,7 +62,17 @@ class DB {
 		}
 		
 		// Bind parameters.
-		if ($statement->bind_param($param_types, $params)) {
+		// Inspiration taken from https://github.com/joshcam/PHP-MySQLi-Database-Class/blob/master/MysqliDb.php
+		$b_params = array('');
+		foreach ($params as $key => $value) {
+			// Add in the type.
+			$b_params[0] .= DB::determineBindType($value);
+			
+			// Add in the value.
+			array_push($b_params, $params[$key]);
+		}
+		
+		if (!call_user_func_array(array($statement, 'bind_param'), DB::convertToReference($b_params))) {
 			echo "DB binding parameters error [ ".$statement->errno." ]: ".$statement->error;
 			return false;
 		}
@@ -78,9 +93,38 @@ class DB {
 		return $result;;
 	}
 	
+	// Returns a string containing s, i, b, or d corresponding to the type of variable.
+	public static function determineBindType($var) {
+		switch (gettype($var)) {
+			case 'NULL':
+			case 'string':
+				return 's';
+				break;
+			
+			case 'boolean':
+			case 'integer':
+				return 'i';
+				break;
+			
+			case 'blob':
+				return 'b';
+				break;
+			
+			case 'double':
+				return 'd';
+				break;
+		}
+		return '';
+	}
 	
-	
-	
+	// Converts values in an array to references.
+	public static function convertToReference(array $arr) {
+		$refs = array();
+		foreach ($arr as $key => $value) {
+			$refs[$key] =& $arr[$key];
+		}
+		return $refs;
+	}
 	
 	
 }

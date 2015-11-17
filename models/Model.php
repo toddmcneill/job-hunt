@@ -8,14 +8,14 @@ abstract class Model {
 	
 	
 	// Loads this object from the database specified by the table name and the primary key (id) value.
-	protected function loadFromDb($table, $id) {
+	protected function loadFromDb($table, $key_name, $key_value) {
 		$query = "
 			SELECT *
 			FROM ".$table."
-			WHERE id=".$id."
+			WHERE ".$key_name." = ?
 		";
 		
-		$result = DB::query($query);
+		$result = DB::query($query, array($key_value));
 		if ($row = $result->fetch_object()) {
 			$this->loadFromDbRow($row);
 		}
