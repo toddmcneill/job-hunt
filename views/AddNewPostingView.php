@@ -11,7 +11,8 @@ class AddNewPostingView extends View {
 		$str = "
 			<h2>Add New Job Posting</h2>
 			
-			<form action='/posting/addNew' method='post'>				
+			<form action='/posting/addNew' method='post'>		
+				<input type='hidden' name='add_new_posting_form' value='true' />
 				<div class='form_row'>
 					<input type='text' name='url' placeholder='URL' />
 				</div>

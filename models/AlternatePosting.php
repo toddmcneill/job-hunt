@@ -3,12 +3,12 @@
 class AlternatePosting extends Model {
 	
 	protected
-		apst_id = null,
-		url = '',
-		pstg_id = null,
-		date_added = null;
+		$apst_id = null,
+		$url = '',
+		$pstg_id = null,
+		$date_added = null;
 	
-	public __construct($pstg_id = null) {
+	public function __construct($pstg_id = null) {
 		// Load the object from the database.
 		if ($pstg_id != null) {
 			

@@ -10,8 +10,17 @@ define('DB_NAME', 'job_hunt');
 require_once('system/Autoload.php');
 new Autoload();
 
+// Start the session.
+session_start();
+
+// Post/Get/Redirect
+Params::pgr();
+
 // Run everything.
 Calling::run();
+
+// Clear the session variable used to store POST data.
+Params::clearSessionParams();
 
 ?>
 

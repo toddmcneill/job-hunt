@@ -27,7 +27,7 @@ abstract class Model {
 		
 		if (is_object($row)) {
 			// The row is an object.
-			$row_data = get_object_vars($row)
+			$row_data = get_object_vars($row);
 		} else if (is_array($row)) {
 			// The row is an array.
 			$row_data = $row;
@@ -50,16 +50,15 @@ abstract class Model {
 	
 	// Auto getter and setter functions.
 	// http://stackoverflow.com/a/8743064
-	public __call($method, $params) {
+	public function __call($method, $params) {
 		
 		// Auto getter.
-		if (strncasecmp($method, 'get', 3)) {
+		if (strncasecmp($method, 'get', 3) == 0) {
 			$var = $this->convertCamelCaseToUnderscore(substr($method, 3));
 			return $this->$var;
 		}
-		
 		// Auto setter.
-		if (strncasecmp($method, 'set', 3)) {
+		if (strncasecmp($method, 'set', 3) == 0) {
 			$var = $this->convertCamelCaseToUnderscore(substr($method, 3));
 			$this->$var = $params[0];
 		}
@@ -68,7 +67,7 @@ abstract class Model {
 	
 	// Convert a camel case variable to underscore.
 	// http://stackoverflow.com/a/1993772
-	private convertCamelCaseToUnderscore($str) {
+	private function convertCamelCaseToUnderscore($str) {
 		
 		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $str, $matches);
 		$ret = $matches[0];

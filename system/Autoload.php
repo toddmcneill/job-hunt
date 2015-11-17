@@ -29,11 +29,11 @@ class Autoload {
 		return false;
 	}
 	
-	// Contains the list of all files that can be autoloaded through this class.
+	// Contains an associative array of [class_name > file_path] for individual files that can be autoloaded
+	// that wouldn't be found in the general autoloader function.
 	private function getFileList() {
 		$file_list = array(
-			'DB' => 'system/DB.php',
-			'Calling' => 'system/Calling.php',
+			
 		);
 		
 		return $file_list;
@@ -48,7 +48,8 @@ class Autoload {
 		$autoload_dirs = array(
 			'models',
 			'views',
-			'controllers'
+			'controllers',
+			'system'
 		);
 		
 		// Look in each directory for the file.
