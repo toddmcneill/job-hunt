@@ -1,0 +1,70 @@
+body {
+	background-color: #EEC;
+}
+
+.body_content {
+	width: 1000px;
+	margin: 0 auto;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
+	border: 1px solid gray;
+	background-color: #EEE;
+}
+
+.header_content, .page_content, .footer_content {
+	padding: 12px;
+}
+
+.header_content {
+	border-bottom: 1px solid gray;
+	text-align: center;
+}
+
+.page_content {
+	min-height: 400px;
+}
+
+.footer_content {
+	border-top: 1px solid gray;
+	text-align: center;
+}
+
+
+.header_content a {
+	color: black;
+	text-decoration: none;
+}
+
+
+.form_row {
+	margin: 12px 0;
+	width: 400px;
+}
+
+input[type='text'], input[type='date'], textarea, select {
+	padding: 8px;
+	border: 1px solid gray;
+	border-radius: 3px;
+	font-size: 110%;
+	width: 100%;
+}
+
+textarea {
+	height: 80px;
+}
+
+::-webkit-input-placeholder {
+	color: rgba(120, 120, 120, 0.8);
+}
+::-moz-placeholder {
+	color: rgba(120, 120, 120, 0.8);
+}
+:-ms-input-placeholder {
+	color: rgba(120, 120, 120, 0.8);
+}
+
+input[type='submit'] {
+	padding: 12px 24px;
+	background-color: #3F8EDC;
+	color: white;
+	font-size: 120%;
+}

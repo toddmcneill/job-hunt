@@ -10,8 +10,15 @@ class PostingController extends Controller {
 		
 	}
 	
+	// Process the form to add a new posting.
 	public function addNewAction($params) {
-		echo 'adding new';
+		
+		var_dump($_POST);
+		
+		
+		
+		
+		
 	}
 	
 }

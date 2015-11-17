@@ -5,7 +5,5 @@ Options +FollowSymLinks
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/index\.php -f
-RewriteCond %{DOCUMENT_ROOT}/views -d
 
 RewriteRule ^(.*)$  index\.php?$1 [QSA]

@@ -36,14 +36,12 @@ abstract class View {
 
 	// Returns a string that contains the page header content.
 	protected function getHeaderContent() {
-		$str = "Default Header";
-		return $str;
+		return '';
 	}
 	
 	// Returns a string that contains the page footer content.
 	protected function getFooterContent() {
-		$str = "Default Footer";
-		return $str;
+		return '';
 	}
 	
 	
@@ -54,13 +52,13 @@ abstract class View {
 	
 		
 	// This is the main function where the entire page is assembled.
-	final public function getViewContents() {
+	final public function getViewContents($ob_contents = '') {
 		$str = "
 			<!DOCTYPE html>
 			<html>
 				<head>
 					<title>
-						".$this->getPageTitle()."
+						".$this->getTitle()."
 					</title>
 					".$this->getHeadContent()."
 					<style>
@@ -71,7 +69,10 @@ abstract class View {
 					</script>
 				</head>
 				<body>
-					".$this->getBodyContent()."
+					".$ob_contents."
+					<div class='body_content'>
+						".$this->getBodyContent()."
+					</div>
 				</body>
 			</html>
 		";
@@ -83,8 +84,8 @@ abstract class View {
 	final private function getHeadContent() {
 		$str = '';
 		
-		// Include jquery on all pages.
-		$this->addJavascript('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
+		// Include site javascript and css
+		$this->includeSiteJavascriptAndCss();
 		
 		// Get the css includes.
 		$str .= $this->getCssIncludes();
@@ -99,6 +100,7 @@ abstract class View {
 	final private function getBodyContent() {
 		$str = "
 			<div class='header_content'>
+				".$this->getSiteHeaderContent()."
 				".$this->getHeaderContent()."
 			</div>
 			<div class='page_content'>
@@ -106,6 +108,7 @@ abstract class View {
 			</div>
 			<div class='footer_content'>
 				".$this->getFooterContent()."
+				".$this->getSiteFooterContent()."
 			</div>
 		";
 		return $str;
@@ -138,6 +141,45 @@ abstract class View {
 			$js_include_tags[] = "<script src='".$source."'></script>";
 		}
 		return implode($js_include_tags);
+	}
+	
+	// Includes the site javascript and css files.
+	final private function includeSiteJavascriptAndCss() {
+		// Include jquery.
+		$this->addJavascript('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
+		
+		// Include the system javascript and css files.
+		$this->addJavascript('system', '/includes/system.js');
+		$this->addCss('system', '/includes/system.css');		
+	}
+	
+	// Returns the string that will be used in the title tag.
+	final private function getTitle() {
+		$str = $this->getPageTitle()." | ".$this->getSiteTitle();
+		return $str;
+	}
+	
+	// Returns the title of the site.
+	final private function getSiteTitle() {
+		return 'Job Hunt';
+	}
+	
+	// Returns the header content for the site.
+	final private function getSiteHeaderContent() {
+		$str = "
+			<h1>
+				<a href='/'>Job Hunt</a>
+			</h1>
+		";
+		return $str;
+	}
+	
+	// Returns the header content for the site.
+	final private function getSiteFooterContent() {
+		$str = "
+			Todd McNeill
+		";
+		return $str;
 	}
 	
 }

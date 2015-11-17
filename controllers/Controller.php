@@ -9,12 +9,15 @@ abstract class Controller {
 	public abstract function defaultAction($params);
 	
 	// Displays the view.
-	public function display() {
-		// Check if a view has been set.
-		if (!is_null($this->view)) {
-			// Print the view.
-			echo $this->view->getViewContents();
+	public function display($ob_contents = '') {
+		// Use the default view if no view has been set.
+		if (is_null($this->view)) {
+			$this->view = new DefaultView();
 		}
+		
+		// Print the view.
+		echo $this->view->getViewContents($ob_contents);
+		
 	}
 	
 }

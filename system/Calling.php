@@ -40,11 +40,17 @@
 			// Init the Controller.
 			$controller = new $controller_class_name();
 			
+			// Start output buffering.
+			ob_start();
+			
 			// Run the action.
 			$controller->$action_function_name($params);
 			
+			// Pass the contents of the output buffer to be displayed as part of the view.
+			$ob_contents = ob_get_clean();
+			
 			// Display the view.
-			$controller->display();
+			$controller->display($ob_contents);
 		}
 		
 	}

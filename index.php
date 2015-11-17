@@ -1,6 +1,6 @@
 <?php
 
-// Define DB
+// Define DB connection parameters.
 define('DB_HOST', 'localhost');
 define('DB_USERNAME', 'job_hunt_user');
 define('DB_PASSWORD', 'K6NdbvSjV6LXy2mK');
