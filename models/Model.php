@@ -6,13 +6,25 @@ abstract class Model {
 	// Should return an array of object variable names.
 	protected abstract function getVarNames();
 	
+	// Should return an associative array that can be inserted in the database.
+	protected abstract function getDbSaveArray();
+	
+	// Should return whether this is a new object or already has been saved.
+	protected abstract function isNewObject();
+	
+	// Should return the table that this object is stored in.
+	protected abstract function getTableName();
+	
+	// Should return the primary key field name for this object.
+	protected abstract function getPrimaryKeyName();
+	
 	
 	// Loads this object from the database specified by the table name and the primary key (id) value.
-	protected function loadFromDb($table, $key_name, $key_value) {
+	protected function loadFromDb($key_value) {
 		$query = "
 			SELECT *
-			FROM ".$table."
-			WHERE ".$key_name." = ?
+			FROM ".$this->getTableName()."
+			WHERE ".$this->getPrimaryKeyName()." = ?
 		";
 		
 		$result = DB::query($query, array($key_value));
@@ -46,6 +58,70 @@ abstract class Model {
 		}
 		
 	}
+	
+	
+	// Saves an object to the database. Inserts if new or updates if existing.
+	public function saveToDb() {
+		// Get the data from the object that will be saved.
+		$db_save_array = $this->getDbSaveArray();
+		
+		// Prepare the values.
+		$values = array_values($db_save_array);
+		
+		// Insert or update a record in the database.
+		if ($this->isNewObject()) {
+			// Prepare the field list.
+			$field_list = implode(',', array_keys($db_save_array));
+			
+			// Prepare the placeholder string (a list of ?s)
+			$placeholders = array();
+			for ($i=0; $i < count($db_save_array); $i++) {
+				$placeholders[] = '?';
+			}
+			$placeholder_str = implode(',', $placeholders);
+			
+			// Put together the query to create a new record for the object.
+			$query = "
+				INSERT INTO ".$this->getTableName()."
+					(".$field_list.")
+				VALUES
+					(".$placeholder_str.")
+			";
+			
+			// Run the query.
+			DB::query($query, $values);
+			
+			// Set the id on the object.
+			$primary_key_name = $this->getPrimaryKeyName();
+			$this->$primary_key_name = DB::getInsertId();
+			
+		} else {
+			// Prepare the field list.
+			$fields = array();
+			foreach (array_keys($db_save_array) as $field_name) {
+				$field_list[] = $field_name." = ?";
+			}
+			$field_list = implode(',', $fields);
+			
+			// Get the primary key name.
+			$primary_key_name = $this->getPrimaryKeyName();
+			
+			// Put together the query to update the record for the object.
+			$query = "
+				UPDATE ".$this->getTableName()."
+				SET
+					".$field_list."
+				WHERE
+					".$primary_key_name." = ?
+			";
+			$values[] = $this->$primary_key_name;
+			
+			// Run the query.
+			DB::query($query, $values);
+		}
+		
+	}
+	
 	
 	
 	// Auto getter and setter functions.

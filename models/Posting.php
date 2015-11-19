@@ -18,7 +18,7 @@ class Posting extends Model {
 	public function __construct($pstg_id = null) {
 		// Load the object from the database.
 		if ($pstg_id != null) {
-			$this->loadFromDb('posting', 'pstg_id', $pstg_id);
+			$this->loadFromDb($pstg_id);
 		}
 	}
 	
@@ -40,6 +40,37 @@ class Posting extends Model {
 		return $var_names;
 	}
 	
+	protected function getDbSaveArray() {
+		$row = array(
+			'url' => $this->url,
+			'company' => $this->company,
+			'job_title' => $this->job_title,
+			'job_descr' => $this->job_descr,
+			'job_notes' => $this->job_notes,
+			'rating' => $this->rating,
+			'date_emailed' => $this->date_emailed,
+			'reply_recvd' => $this->reply_recvd,
+			'reply_notes' => $this->reply_notes
+		);
+		
+		if (!$this->isNewObject()) {
+			$row['pstg_id'] = $this->pstg_id;
+		}
+		
+		return $row;
+	}
+	
+	protected function isNewObject() {
+		return is_null($this->pstg_id);
+	}
+	
+	protected function getTableName() {
+		return 'posting';
+	}
+	
+	protected function getPrimaryKeyName() {
+		return 'pstg_id';
+	}
 	
 	
 }

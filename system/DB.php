@@ -35,7 +35,7 @@ class DB {
 		
 		// Check to see if the query should be executed as a prepared statement.
 		if (!is_null($params)) {
-			return self::preparedResultQuery($query, $params);
+			return self::preparedStatementQuery($query, $params);
 		}
 		
 		// Execute the query and get the query result.
@@ -49,14 +49,14 @@ class DB {
 	}
 	
 	
-	
 	// Executes a query using a prepared statement and returns the result.
-	public static function preparedResultQuery($query, $params) {
+	public static function preparedStatementQuery($query, $params) {
 		// Make sure a connection exists.
 		self::connectToDb();
 		
 		// Prepare the query.
-		if (!$statement = self::$link->prepare($query)) {
+		$statement = self::$link->prepare($query);
+		if (self::$link->errno != 0) {
 			echo "DB statement preparation error [ ".self::$link->errno." ]: ".self::$link->error;
 			return false;
 		}
@@ -72,26 +72,30 @@ class DB {
 			array_push($b_params, $params[$key]);
 		}
 		
-		if (!call_user_func_array(array($statement, 'bind_param'), DB::convertToReference($b_params))) {
+		call_user_func_array(array($statement, 'bind_param'), DB::convertToReference($b_params));
+		if ($statement->errno != 0) {
 			echo "DB binding parameters error [ ".$statement->errno." ]: ".$statement->error;
 			return false;
 		}
 		
 		// Execute the query.
-		if (!$statement->execute()) {
+		$statement->execute();
+		if ($statement->errno != 0) {
 			echo "DB statement execution error [ ".$statement->errno." ]: ".$statement->error;
 			return false;
 		}
 		
 		// Get the query result.
-		if (!$result = $statement->get_result()) {
+		$result = $statement->get_result();
+		if ($statement->errno != 0) {
 			echo "DB result fetch error [ ".$statement->errno." ]: ".$statement->error;
 			return false;
 		}
 		
 		// Return the query result.
-		return $result;;
+		return $result;
 	}
+	
 	
 	// Returns a string containing s, i, b, or d corresponding to the type of variable.
 	public static function determineBindType($var) {
@@ -117,6 +121,7 @@ class DB {
 		return '';
 	}
 	
+	
 	// Converts values in an array to references.
 	public static function convertToReference(array $arr) {
 		$refs = array();
@@ -124,6 +129,12 @@ class DB {
 			$refs[$key] =& $arr[$key];
 		}
 		return $refs;
+	}
+	
+	
+	// Returns the id auto-generated on the last query.
+	public static function getInsertId() {
+		return self::$link->insert_id;
 	}
 	
 	

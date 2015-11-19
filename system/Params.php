@@ -14,14 +14,18 @@ class Params {
 		return isset($_SESSION['params']);
 	}
 	
-	// Returns whether a parameter exists.
+	// Returns true or false depending on whether a parameter is set.
 	public static function isParamSet($param) {
 		return isset($_SESSION['params'][$param]);
 	}
 	
 	// Returns a single parameter.
-	public static function getParam($param) {
-		return $_SESSION['params'][$param];
+	// If the parameter is not set, $default is returned.
+	public static function getParam($param, $default = null) {
+		if (isset($_SESSION['params']) && isset($_SESSION['params'][$param])) {
+			return $_SESSION['params'][$param];
+		}
+		return $default;
 	}
 	
 	// Returns all parameters.

@@ -11,8 +11,7 @@ class AddNewPostingView extends View {
 		$str = "
 			<h2>Add New Job Posting</h2>
 			
-			<form action='/posting/addNew' method='post'>		
-				<input type='hidden' name='add_new_posting_form' value='true' />
+			<form action='/posting/addNew' method='post'>
 				<div class='form_row'>
 					<input type='text' name='url' placeholder='URL' />
 				</div>
@@ -35,8 +34,8 @@ class AddNewPostingView extends View {
 					</label>
 				</div>
 				<div class='form_row'>
-					<input type='hidden' name='emailed' />
-					<input type='checkbox' name='emailed' />
+					<input type='hidden' name='emailed' value='false' />
+					<input type='checkbox' name='emailed' value='true' />
 					<label>
 						<span>Email Sent</span>
 						<div>
@@ -47,8 +46,8 @@ class AddNewPostingView extends View {
 				<div class='form_row'>
 					<label>
 						<span>Reply Received</span>
-						<input type='hidden' name='reply_recvd' value='off'>
-						<input type='checkbox' name='reply_recvd' />
+						<input type='hidden' name='reply_recvd' value='false'>
+						<input type='checkbox' name='reply_recvd' value='true' />
 					</label>
 				</div>
 				<div class='form_row'>
@@ -57,6 +56,7 @@ class AddNewPostingView extends View {
 				<div class='form_row'>
 					<input type='submit' value='Add New Posting' />
 				</div>
+				<input type='hidden' name='form_complete' value='add_new_posting' />
 			</form>
 			
 		";
