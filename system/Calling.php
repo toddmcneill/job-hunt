@@ -14,11 +14,11 @@
 			$call_params = (!empty($q_string) ? explode('/', $q_string) : array());
 			
 			// All controllers have suffix "Controller", such as NameController.php and a matching class name.
-			// If no controller name given, use MainController.php.
+			// If no controller name given, use IndexController.php.
 			if (count($call_params) > 0) {
 				$controller_name = (class_exists(ucfirst($call_params[0]).'Controller') ? ucfirst(array_shift($call_params)) : 'Error');
 			} else {
-				$controller_name = 'Main';
+				$controller_name = 'Index';
 			}
 			$controller_class_name = $controller_name.'Controller';
 			

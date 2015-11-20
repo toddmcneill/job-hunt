@@ -18,6 +18,15 @@ abstract class Model {
 	// Should return the primary key field name for this object.
 	protected abstract function getPrimaryKeyName();
 	
+	// Should return the value of the primary key.
+	public abstract function getId();
+	
+	// Sets the id (primary key field) for the object.
+	protected function setId($id) {
+		$primary_key_name = $this->getPrimaryKeyName();
+		$this->$primary_key_name = $id;
+	}
+	
 	
 	// Loads this object from the database specified by the table name and the primary key (id) value.
 	protected function loadFromDb($key_value) {
@@ -92,8 +101,7 @@ abstract class Model {
 			DB::query($query, $values);
 			
 			// Set the id on the object.
-			$primary_key_name = $this->getPrimaryKeyName();
-			$this->$primary_key_name = DB::getInsertId();
+			$this->setId(DB::getInsertId());
 			
 		} else {
 			// Prepare the field list.
@@ -114,7 +122,7 @@ abstract class Model {
 				WHERE
 					".$primary_key_name." = ?
 			";
-			$values[] = $this->$primary_key_name;
+			$values[] = $this->getId();
 			
 			// Run the query.
 			DB::query($query, $values);

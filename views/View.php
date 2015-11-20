@@ -3,6 +3,7 @@
 abstract class View {
 	
 	private
+		$data = array(),
 		$css_includes = array(),
 		$js_includes = array();
 	
@@ -155,7 +156,11 @@ abstract class View {
 	
 	// Returns the string that will be used in the title tag.
 	final private function getTitle() {
-		$str = $this->getPageTitle()." | ".$this->getSiteTitle();
+		if ($this->getPageTitle() != '') {
+			$str = $this->getPageTitle()." | ".$this->getSiteTitle();
+		} else {
+			$str = $this->getSiteTitle();
+		}
 		return $str;
 	}
 	

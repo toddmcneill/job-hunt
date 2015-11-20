@@ -68,3 +68,19 @@ input[type='submit'] {
 	color: white;
 	font-size: 120%;
 }
+
+.posting_field_label, .posting_field_value {
+	display: inline-block;
+}
+
+.posting_field_label {
+	width: 120px;
+}
+
+.posting_field_label::after {
+	content: ':';
+}
+
+.posting_field_value {
+	width: 480px;
+}

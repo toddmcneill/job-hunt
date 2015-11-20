@@ -12,7 +12,7 @@ abstract class Controller {
 	public function display($ob_contents = '') {
 		// Use the default view if no view has been set.
 		if (is_null($this->view)) {
-			$this->view = new DefaultView();
+			$this->view = new IndexView();
 		}
 		
 		// Print the view.

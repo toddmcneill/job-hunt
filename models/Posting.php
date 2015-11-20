@@ -72,6 +72,10 @@ class Posting extends Model {
 		return 'pstg_id';
 	}
 	
+	public function getId() {
+		return $this->pstg_id;
+	}
+	
 	
 }
 

@@ -33,7 +33,7 @@ class Autoload {
 	// that wouldn't be found in the general autoloader function.
 	private function getFileList() {
 		$file_list = array(
-			
+			// 'class_name' => 'file_location'
 		);
 		
 		return $file_list;
